@@ -1,10 +1,8 @@
 /* Root component that is going to render when we go to the main page of our website */
 
 import Image from 'next/image'
-
 import styles from './page.module.css'
-
-
+import Link from 'next/link'
 
 export default function Home() {
   return (
@@ -12,9 +10,9 @@ export default function Home() {
       <main className='max-w-screen-2xl m-auto bg-white'>
         {/* NAVBAR */}
           <nav className='bg-white p-2 flex justify-between'>
-            <a href='' className='font-bold text-gray-700 text-2xl'>
+            <Link href='' className='font-bold text-gray-700 text-2xl'>
               OpenTable
-            </a>
+            </Link>
             <div className='flex'>
               <button className='bg-blue-400 text-white border p-1 px-4 rounded mr-3'>Sign in</button>
               <button className='border p-1 px-4 rounded'>Sign up</button>
@@ -39,6 +37,7 @@ export default function Home() {
           <div className='py-3 px-36 mt-10 flex flex-wrap'>
             {/* CARD */}
             <div className='w-64 h-72 m-3 rounded overflow-hidden border cursor-pointer'>
+              <Link href='/restaurant/shakeshak'>
               <img src='https://resizer.otstatic.com/v2/photos/wide-huge/3/47025845.jpg'
                 alt="Cedron Wine Bar"
                 className='w-full' width={64} height={72}/>
@@ -55,7 +54,9 @@ export default function Home() {
                 <p>Toronto</p>
               </div>
               <p className='text-sm mt-1 font-bold'>Booked 3 times today</p>
+              </Link>
             </div>
+            
             {/* CARD */}
           </div>
           {/* CARDS */}
