@@ -1,10 +1,17 @@
 /* Root component that is going to render when we go to the main page of our website */
 
+'use client'
 import Image from 'next/image'
 import styles from './page.module.css'
 import Link from 'next/link'
+/* useRouter for programatic navigation i.e. putting limits to the search within the search button */
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 
 export default function Home() {
+  const router = useRouter();
+  const [location, setLocation] = useState('');
+
   return (
     <main className='bg-gray-100 min-h-screen w-screen'>
       <main className='max-w-screen-2xl m-auto bg-white'>
@@ -27,8 +34,20 @@ export default function Home() {
             </div>
             {/* SEARCHBAR */}
             <div className='rounded overflow-hidden text-lg text-left py-3 m-auto flex justify-center'>
-              <input className='rounded mr-3 width=[470px] px-2' type='text' placeholder='State, city or town'></input>
-              <button className='rounded bg-black py-2 px-9 text-white'>Let's go</button>
+              <input
+                className='rounded mr-3 width=[470px] px-2'
+                type='text'
+                placeholder='State, city or town'
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+                />
+              <button className='rounded bg-black py-2 px-9 text-white'
+                onClick={()=>{
+                  if(location === 'banana') return;
+                  router.push('/search');
+                }}
+              >
+                Let's go</button>
             </div>
             {/* SEARCHBAR */}
           </div>
