@@ -1,5 +1,6 @@
+"use client"
 
-export default function ReservationCard() {
+ const   ReservationCard = () => {
   return (
     <div className='w-[27%] relative'>
         <div className='fixed w-[15%] bg-white rounded p-3 shadow'>
@@ -35,3 +36,5 @@ export default function ReservationCard() {
     </div>
   )
 }
+
+export default ReservationCard;
