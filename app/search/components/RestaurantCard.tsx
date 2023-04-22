@@ -1,24 +1,31 @@
 import Link from "next/link";
+import {RestaurantCardType} from "../page";
+import Price from "../../components/Price";
 
-export default function RestaurantCard() {
+
+interface Props {
+    restaurant : RestaurantCardType;
+}
+
+export default function RestaurantCard({restaurant}: Props) {
     return(
         <div className='border-b flex pb-5'>
-            <img className='w-44 rounded' src='https://resizer.otstatic.com/v2/photos/legacy/3/47921503.png' alt='' ></img>
+            <img className='w-44 h-36 rounded' src={restaurant.main_image} alt='' ></img>
             <div className='pl-5'>
-                <h2 className='text-3xl'>Restaurant Kato</h2>
+                <h2 className='text-3xl'>{restaurant.name}</h2>
                 <div className='flex items-start'>
                     <div className='flex mb-2'>****</div>
                     <p className='ml-2 text-sm'>Awesome</p>
                 </div>
                 <div className="mb-9">
                     <div className="font-light flex text-reg">
-                        <p className="mr-4">$$$</p>
-                        <p className="mr-4">Japaneese</p>
-                        <p className="mr-4">Ottawa</p>
+                        <Price price={restaurant.price}></Price>
+                        <p className="mr-4 capitalize">{restaurant.cuisine.name}</p>
+                        <p className="mr-4 capitalize">{restaurant.location.name}</p>
                     </div>
                 </div>
-                <div className='text-slate-400'>
-                    <Link href='/restaurant/shakeshak'>View more information</Link>
+                <div className='text-blue-400'>
+                    <Link href={`restaurant/${restaurant.slug}`}>View more information</Link>
                 </div>
             </div>
         </div>
