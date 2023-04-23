@@ -1,3 +1,4 @@
+import Stars from '@/app/components/Stars';
 import { calculateReviewRatingAverage } from '@/utils/calculateReviewRatingAverage';
 import { Review } from '@prisma/client'
 
@@ -10,7 +11,7 @@ export default function Rating({reviews}: Props) {
   return (
     <div className='flex items-end'>
         <div className='ratings mt-2 flex items-center'>
-            <p>*****</p>
+          <Stars reviews={reviews}/>
             <p className='text-reg ml-3'>{rating_avg}</p>
         </div>
         <div>

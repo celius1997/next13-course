@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { RestaurantCardType } from "../page";
 import Price from './Price';
+import Stars from "./Stars";
+import Image from "next/image";
 
 interface Props {
     restaurant : RestaurantCardType;
@@ -8,7 +10,7 @@ interface Props {
 
 export default function RestaurantCard({restaurant}: Props) {
     return(
-    <div className='w-64 h-72 m-3 rounded overflow-hidden border cursor-pointer'>
+    <div className='w-64 h-72 m-3 rounded overflow-hidden border cursor-pointer bg-white'>
         <Link href={`/restaurant/${restaurant.slug}`}>
             <img src={restaurant.main_image}
             alt={restaurant.name}
@@ -16,7 +18,7 @@ export default function RestaurantCard({restaurant}: Props) {
             <div className='p-1'>
                 <h3 className='font-bold text-2xl mb-2'>{restaurant.name}</h3>
                 <div className='flex items-start'>
-                    <div className='flex mb-2'>*****</div>
+                    <Stars reviews={restaurant.reviews}/>
                     <p className='ml-2'>{restaurant.reviews.length} Reviews</p>
                 </div>
             </div>
