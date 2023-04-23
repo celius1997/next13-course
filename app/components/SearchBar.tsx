@@ -2,7 +2,7 @@
 
 /*  useRouter for programatic navigation i.e. putting limits to the search within the search button */
 import { useRouter } from 'next/navigation'
-import { useState } from 'react' 
+import { useState } from 'react';
 /* Use arrow function in client component */
 
 const SearchBar =  () => {

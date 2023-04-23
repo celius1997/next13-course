@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,83 +7,82 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum PRICE {
-  CHEAP
-  REGULAR
-  EXPENSIVE
-}
-
 model Restaurant {
-  id    Int   @id   @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   name        String
   main_image  String
   description String
   open_time   String
   close_time  String
-  images      String []
-  slug        String  @unique
+  images      String[]
+  slug        String   @unique
   price       PRICE
-  items       Item []
   location_id Int
-  location    Location @relation(fields: [location_id], references: [id])
   cuisine_id  Int
-  cuisine     Cuisine @relation(fields: [cuisine_id], references: [id])
+  created_at  DateTime @default(now())
+  updated_at  DateTime @default(now())
+  items       Item[]
+  cuisine     Cuisine  @relation(fields: [cuisine_id], references: [id])
+  location    Location @relation(fields: [location_id], references: [id])
   reviews     Review[]
-  created_at  DateTime  @default(now())
-  updated_at  DateTime  @default(now())
-  
 }
 
 model Item {
-  id            Int   @id   @default(autoincrement())
+  id            Int        @id @default(autoincrement())
   name          String
-  price         String
   description   String
-  restaurant_id  Int
+  restaurant_id Int
+  created_at    DateTime   @default(now())
+  updated_at    DateTime   @default(now())
+  price         String
   restaurant    Restaurant @relation(fields: [restaurant_id], references: [id])
-  created_at    DateTime  @default(now())
-  updated_at    DateTime  @default(now())
 }
 
 model Location {
-  id            Int   @id   @default(autoincrement())
-  name          String
-  restaurants   Restaurant []
-  created_at    DateTime  @default(now())
-  updated_at    DateTime  @default(now())
-
+  id          Int          @id @default(autoincrement())
+  name        String
+  created_at  DateTime     @default(now())
+  updated_at  DateTime     @default(now())
+  restaurants Restaurant[]
 }
 
 model Cuisine {
-  id            Int   @id   @default(autoincrement())
-  name          String
-  restaurants   Restaurant []
-  created_at    DateTime  @default(now())
-  updated_at    DateTime  @default(now())
+  id          Int          @id @default(autoincrement())
+  name        String
+  created_at  DateTime     @default(now())
+  updated_at  DateTime     @default(now())
+  restaurants Restaurant[]
 }
 
 model Review {
-  id            Int   @id   @default(autoincrement())
+  id            Int        @id @default(autoincrement())
   first_name    String
   last_name     String
   text          String
   rating        Float
-  restaurant_id Int //Foreign Key
-  restaurant    Restaurant @relation(fields: [restaurant_id], references: [id])
+  restaurant_id Int
   user_id       Int
-  user          User @relation(fields: [user_id], references: [id])
-  created_at    DateTime  @default(now())
-  updated_at    DateTime  @default(now())
+  created_at    DateTime   @default(now())
+  updated_at    DateTime   @default(now())
+  restaurant    Restaurant @relation(fields: [restaurant_id], references: [id])
+  user          User       @relation(fields: [user_id], references: [id])
 }
 
 model User {
-  id            Int   @id   @default(autoincrement())
-  first_name    String
-  last_name     String
-  city          String
-  email         String
-  phone         String
-  reviews       Review[]
-  created_at    DateTime  @default(now())
-  updated_at    DateTime  @default(now())
+  id         Int      @id @default(autoincrement())
+  first_name String
+  last_name  String
+  city       String
+  email      String
+  password   String
+  phone      String
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+  reviews    Review[]
+}
+
+enum PRICE {
+  CHEAP
+  REGULAR
+  EXPENSIVE
 }
