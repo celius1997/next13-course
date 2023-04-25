@@ -47,7 +47,7 @@ export default function AuthModalInput({inputs, handleChangeInput, isSignIn}: Pr
                         onChange={handleChangeInput}
                         name='city' />
                 </div></>
-}
+        }
         <div className='my-3 flex justify-between text-sm'>
             <input
                 type= 'email'
@@ -62,7 +62,9 @@ export default function AuthModalInput({inputs, handleChangeInput, isSignIn}: Pr
                 type='password'
                 className='border rounded p-2 py-3 w-full'
                 placeholder='Password'
-                value={inputs.password}/>
+                value={inputs.password}
+                onChange={handleChangeInput}
+                name='password'/>
         </div>
     </div>
   )
