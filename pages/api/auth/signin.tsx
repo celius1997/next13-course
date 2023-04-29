@@ -51,7 +51,7 @@ if(req.method === "POST"){
         .status(401)
         .json({errorMessage: "Password is invalid"})
     }
-
+    // Create the JWT unique identifier
     // HS256 to create the header
     const alg = "HS256"
     const secret = new TextEncoder().encode(process.env.JWT_SECRET)

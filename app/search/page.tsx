@@ -40,7 +40,7 @@ const fetchRestaruantsByLocation = async (searchParams: SearchParams) => {
       equals: searchParams.price
     }
     where.price = price
-  }
+  };
   const select = {
     id: true,
     name: true,
