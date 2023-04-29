@@ -35,7 +35,7 @@ export default async function handler(
     }
     const {email} = payload
     // In the payload we recover the users email, which is unique
-    const user = prisma.user.findFirst({
+    const user = await prisma.user.findFirst({
         where: {
             email
         },
