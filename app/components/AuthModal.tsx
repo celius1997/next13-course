@@ -4,7 +4,7 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import AuthModalInput from './AuthModalInput';
 
 const style = {
@@ -37,6 +37,20 @@ function AuthModal({isSignIn, className}: Props) {
     password: '',
     city: ''
   })
+  const [disabled, setDisabled] = useState(true)
+  useEffect(() => {
+    if(isSignIn) {
+      if(inputs.password && inputs.email) {
+        return setDisabled(false)
+      }
+      setDisabled(true)
+    } else {
+      if(inputs.firstName && inputs.lastName && inputs.email && inputs.password && inputs.city && inputs.phone){
+        return setDisabled(false)
+      }
+      setDisabled(true)
+    }
+  }, [inputs])
 
   const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputs({
@@ -64,8 +78,13 @@ function AuthModal({isSignIn, className}: Props) {
                 <h2 className='text-lg font-light text-center'>
                     {isSignIn? 'Log into your account' : 'Create your OpenTable account'}
                 </h2>
-                <AuthModalInput inputs={inputs} handleChangeInput={handleChangeInput} isSignIn={isSignIn}/>
-                <button className='uppercase bg-blue-400 w-full text-white p-4 rounded text-sm disabled:bg-gray-400'>
+                <AuthModalInput
+                  inputs={inputs}
+                  handleChangeInput={handleChangeInput}
+                  isSignIn={isSignIn}
+                  />
+                <button className='uppercase bg-blue-400 w-full text-white p-4 rounded text-sm disabled:bg-gray-400'
+                disabled = {disabled}>
                   {isSignIn? 'Sign In' : 'Create Account'}
                 </button>
             </div>
