@@ -1,6 +1,5 @@
 
 /* Root component that is going to render when we go to the main page of our website */
-/* Server component */
 import Header from './components/Header'
 import RestaurantCard from './components/RestaurantCard'
 import { PrismaClient, Cuisine, Location, PRICE, Review } from '@prisma/client'
@@ -34,14 +33,13 @@ const fetchRestaurants = async(): Promise<RestaurantCardType[]> => {
 }
 export default async function Home() {
   const restaurants = await fetchRestaurants();
-  return (
+  return (  
     <main>
       <Header/>
       <div className='py-3 px-36 mt-10 flex flex-wrap'>
         {restaurants.map( (restaurant) => (
           <RestaurantCard restaurant={restaurant} key={restaurant.id}/>
         ))}
-        
       </div>
     </main>
   )

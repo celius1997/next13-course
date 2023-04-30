@@ -97,7 +97,7 @@ export default async function Search({
         <div className='w-5/6'>
         {restaurants.length ? (
           restaurants.map(restaurant => (
-            <RestaurantCard restaurant = {restaurant}/>
+            <RestaurantCard restaurant = {restaurant} key={restaurant.id}/>
           ))
         ): (
           <p>Sorry, we found no restaurants in this area</p>
