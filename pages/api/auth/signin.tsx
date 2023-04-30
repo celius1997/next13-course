@@ -3,6 +3,7 @@ import validator from "validator";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from 'bcrypt'
 import * as jose from 'jose'
+import {setCookie} from 'cookies-next'
 
 
 export default async function handler(
@@ -55,14 +56,22 @@ if(req.method === "POST"){
     // HS256 to create the header
     const alg = "HS256"
     const secret = new TextEncoder().encode(process.env.JWT_SECRET)
+
     // Pass a unique identifier
     const token = await new jose.SignJWT({email: userWithEmail.email})
     .setProtectedHeader({alg})
     .setExpirationTime("24h")
     .sign(secret)
     
+    // Save the token in the client navigator from the server
+    setCookie("jwt", token, {req, res, maxAge: 60*6*24});
+
     return res.status(200).json({
-        token: token
+        firstName: userWithEmail.first_name,
+        lastName: userWithEmail.last_name,
+        email: userWithEmail.email,
+        city: userWithEmail.city,
+        phone: userWithEmail.phone
     })
 
 }
