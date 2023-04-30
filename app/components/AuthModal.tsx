@@ -33,6 +33,7 @@ function AuthModal({isSignIn, className}: Props) {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const {signin} = useAuth();
+  const {signup} = useAuth();
   const {loading, data, error, setAuthState} = useContext(AuthenticationContext)
   const [disabled, setDisabled] = useState(true)
 
@@ -69,6 +70,8 @@ function AuthModal({isSignIn, className}: Props) {
   const handleClick = () => {
     if(isSignIn){
       signin({email:inputs.email, password: inputs.password}, handleClose)
+    } else {
+      signup(inputs, handleClose)
     }
   }
 

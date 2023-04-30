@@ -3,6 +3,7 @@ import validator  from "validator";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from 'bcrypt'
 import * as jose from 'jose'
+import { setCookie } from "cookies-next";
 
 const prisma = new PrismaClient();
 
@@ -70,7 +71,7 @@ export default async function handler(
         }
 
         const hashedPassword = await bcrypt.hash(password, 10) 
-         const user = await prisma.user.create({
+        const user = await prisma.user.create({
             data: {
                 first_name: firstName,
                 last_name: lastName,
@@ -88,9 +89,16 @@ export default async function handler(
         .setProtectedHeader({alg})
         .setExpirationTime("24h")
         .sign(secret)
+
+        // Save the token in the client navigator from the server
+        setCookie("jwt", token, {req, res, maxAge: 60*6*24});
         
         return res.status(200).json({
-            token: token
+            firstName: user.first_name,
+            lastName: user.last_name,
+            email: user.email,
+            city: user.city,
+            phone: user.phone
         })
     }
     return res.status(404).json("Unkown endpoint")
