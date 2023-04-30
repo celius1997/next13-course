@@ -6,6 +6,7 @@ import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
 import { useState, useEffect } from 'react';
 import AuthModalInput from './AuthModalInput';
+import useAuth from '@/hooks/useAtuh';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -28,6 +29,8 @@ function AuthModal({isSignIn, className}: Props) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const {signin} = useAuth();  
+  const [disabled, setDisabled] = useState(true)
 
   const [inputs, setInputs] = useState({
     firstName:'',
@@ -37,7 +40,7 @@ function AuthModal({isSignIn, className}: Props) {
     password: '',
     city: ''
   })
-  const [disabled, setDisabled] = useState(true)
+  //Funtions to control the Sign In / Sign Up button
   useEffect(() => {
     if(isSignIn) {
       if(inputs.password && inputs.email) {
@@ -51,13 +54,20 @@ function AuthModal({isSignIn, className}: Props) {
       setDisabled(true)
     }
   }, [inputs])
-
+  // Handler to update the input props
   const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputs({
       ...inputs,
       [e.target.name]: e.target.value
     })
   }
+  // Function to call the sign in/ sign up method of the API ((api/auth/signin)
+  const handleClick = () => {
+    if(isSignIn){
+      signin({email:inputs.email, password: inputs.password})
+    }
+  }
+
   return (
     <div>
       <Button onClick={handleOpen} className={className}>{isSignIn? 'Sign In' : 'Sign Up'}</Button>
@@ -82,9 +92,11 @@ function AuthModal({isSignIn, className}: Props) {
                   inputs={inputs}
                   handleChangeInput={handleChangeInput}
                   isSignIn={isSignIn}
-                  />
+                />
                 <button className='uppercase bg-blue-400 w-full text-white p-4 rounded text-sm disabled:bg-gray-400'
-                disabled = {disabled}>
+                disabled = {disabled}
+                onClick={handleClick}
+                >
                   {isSignIn? 'Sign In' : 'Create Account'}
                 </button>
             </div>
