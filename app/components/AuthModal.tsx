@@ -4,9 +4,12 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import AuthModalInput from './AuthModalInput';
 import useAuth from '@/hooks/useAtuh';
+import { AuthenticationContext } from '../context/AuthContext';
+import CircularProgress from '@mui/material/CircularProgress';
+import Alert from '@mui/material/Alert';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -29,7 +32,8 @@ function AuthModal({isSignIn, className}: Props) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const {signin} = useAuth();  
+  const {signin} = useAuth();
+  const {loading, data, error, setAuthState} = useContext(AuthenticationContext)
   const [disabled, setDisabled] = useState(true)
 
   const [inputs, setInputs] = useState({
@@ -40,7 +44,7 @@ function AuthModal({isSignIn, className}: Props) {
     password: '',
     city: ''
   })
-  //Funtions to control the Sign In / Sign Up button
+  //Functions to control the Sign In / Sign Up button disable and enable
   useEffect(() => {
     if(isSignIn) {
       if(inputs.password && inputs.email) {
@@ -61,7 +65,7 @@ function AuthModal({isSignIn, className}: Props) {
       [e.target.name]: e.target.value
     })
   }
-  // Function to call the sign in/ sign up method of the API ((api/auth/signin)
+  // Function to call the sign in/ sign up method of the API (/api/auth/signin)
   const handleClick = () => {
     if(isSignIn){
       signin({email:inputs.email, password: inputs.password})
@@ -78,7 +82,17 @@ function AuthModal({isSignIn, className}: Props) {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <div className='p-2 h-[500px]'>
+          {loading ? (
+            <div className='px-2 py-24 h-[600px] flex justify-center'>
+              <CircularProgress />
+            </div>
+            ) : (
+            <div className='p-2 h-[500px]'>
+              {error ? 
+                <Alert severity='error' className='mb-4'>
+                  {error}
+                </Alert> 
+              : null}
             <div className="uppercase font-bold text-center pb-2 border-b margin-b">
                 <p className='text-sm'>
                     {isSignIn? 'Sign In' : 'Create Account'}
@@ -100,7 +114,7 @@ function AuthModal({isSignIn, className}: Props) {
                   {isSignIn? 'Sign In' : 'Create Account'}
                 </button>
             </div>
-          </div>
+          </div>)}
         </Box>
       </Modal>
     </div>
