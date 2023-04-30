@@ -68,7 +68,7 @@ function AuthModal({isSignIn, className}: Props) {
   // Function to call the sign in/ sign up method of the API (/api/auth/signin)
   const handleClick = () => {
     if(isSignIn){
-      signin({email:inputs.email, password: inputs.password})
+      signin({email:inputs.email, password: inputs.password}, handleClose)
     }
   }
 

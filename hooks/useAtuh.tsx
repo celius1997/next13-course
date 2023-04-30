@@ -6,7 +6,7 @@ import axios from 'axios'
 const useAuth = () => {
     const {data, loading, error, setAuthState} = useContext(AuthenticationContext)
 
-    const signin = async ({email, password}: {email: string; password: string}) => {
+    const signin = async ({email, password}: {email: string; password: string}, handleClose: () => void) => {
         setAuthState({
             data: null,
             error: null,
@@ -22,6 +22,7 @@ const useAuth = () => {
                 error: null,
                 loading: false
             })
+            handleClose()
         } catch (error: any) {
             setAuthState({
                 data: null,
