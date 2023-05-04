@@ -1,10 +1,13 @@
 "use client"
 import { useState } from 'react'
-import { partySize } from '../../../../data'
+import { partySize, times } from '../../../../data'
 import DatePicker from 'react-datepicker'
-import { create } from '@mui/material/styles/createTransitions'
  
- const ReservationCard = () => {
+interface Props {
+    openTime: String,
+    closeTime: String
+}
+ const ReservationCard = ({openTime, closeTime}: Props) => {
     const [selectedDate, setSelectedDate] = useState<Date| null>(new Date())
     const handleChangeDate = (date: Date | null) => {
         if(date) {
@@ -12,7 +15,7 @@ import { create } from '@mui/material/styles/createTransitions'
         }
         return setSelectedDate(null)
     }
-    const createSelectItems = () => {
+    const createSelectDates = () => {
         let items:any = [];
         partySize.map(size => {
             items.push(
@@ -20,6 +23,21 @@ import { create } from '@mui/material/styles/createTransitions'
             );  
         })          
         return items;
+    }
+    const createSelectTimes = () => {
+        let items:any = [];
+        let filteredTimes = filterTimesByRestaurantOpenWindow()
+        filteredTimes.map(time => {
+            items.push(
+                <option key={time.time} value={time.time}>{time.displayTime}</option>
+            );  
+        })          
+        return items;
+    }
+    const filterTimesByRestaurantOpenWindow = () => {
+        console.log(openTime)
+        console.log(closeTime)
+        return times.filter(time => time.time >= openTime && time.time <= closeTime);
     }
    
   return (
@@ -31,7 +49,7 @@ import { create } from '@mui/material/styles/createTransitions'
             <div className='my-3 flex flex-col'>
                 <label htmlFor=''>Party size</label>
                 <select name='' className='py-3 border-b font-light' id='party-size-select'>
-                    {createSelectItems()}
+                    {createSelectDates()}
                 </select>
             </div>
             <div className='flex justify-between'>
@@ -47,8 +65,7 @@ import { create } from '@mui/material/styles/createTransitions'
                 <div className='flex flex-col w-[48%]'>
                 <label htmlFor=''>Time</label>
                 <select name='' id='' className='py-3 border-b font-light'>
-                <option value=''>1:00 PM</option>
-                <option value=''>2:00 PM</option>
+                    {createSelectTimes() }
                 </select>
             </div>
         </div>
