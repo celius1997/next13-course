@@ -1,6 +1,7 @@
 import NavBar from './components/NavBar'
 import AuthContext from './context/AuthContext'
 import './globals.css'
+import 'react-datepicker/dist/react-datepicker.css'
 import { Raleway } from 'next/font/google'
 
 const font = Raleway({
