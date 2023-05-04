@@ -100,6 +100,9 @@ function AuthModal({isSignIn, className}: Props) {
                 <p className='text-sm'>
                     {isSignIn? 'Sign In' : 'Create Account'}
                 </p>
+                <p>
+                  {data?.firstName} {data?.lastName}
+                </p>
             </div>
             <div className='pt-3 m-auto'>
                 <h2 className='text-lg font-light text-center'>
