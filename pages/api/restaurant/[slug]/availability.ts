@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next"; 
-
+import {times} from '../../../../data/times'
 
 export default async function handler(
     req: NextApiRequest,
@@ -13,8 +13,19 @@ export default async function handler(
     }
     if(!day || !partySize || !time ) {
         return res.status(400).json({
-            errorMesage: 'Invalid data'
+            errorMesage: 'Invalid data provided'
         })
     }
-    return res.json({slug, day, time, partySize})
+
+    const searchTimes = times.find(t => {
+        return t.time === time;
+    })?.searchTimes;
+
+    if(!searchTimes) {
+        return res.status(400).json({
+            errorMesage: 'Invalid time rpovided'
+        })
+    }
+
+    return res.json({searchTimes})
 }
