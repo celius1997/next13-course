@@ -41,8 +41,35 @@ export default async function handler(
             booking_time: true,
             tables: true
         }
+    });
+
+    const bookingTablesObject: {[key:string]: {[key:number]: true}} = {}
+    bookings.forEach(booking => {
+        bookingTablesObject[booking.booking_time.toISOString()] = booking.tables.reduce((obj, table) => {
+            return {
+                ...obj,
+                [table.table_id]:true
+            }
+        }, {})
+    });
+    
+    const restaurant = await prisma.restaurant.findFirst({
+        where: {
+            slug
+        },
+        select: {
+            tables: true
+        }
     })
-    return res.json({searchTimes, bookings})
+
+    if(!restaurant) {
+        return res.status(400).json({
+            errorMesage: 'Invalid data provided'
+        })
+    } 
+    const tables = restaurant.tables;
+
+    return res.json({searchTimes, bookings, bookingTablesObject, tables})
 }
 
-// http://localhost:3000/api/restaurant/vivaan-fine-indian-cuisine-ottawa/availability?day=2023-05-16&time=20:00:00.000Z&partySize=4
+// http://localhost:3000/api/restaurant/vivaan-fine-indian-cuisine-ottawa/availability?day=2023-05-27&time=19:30:00.000Z&partySize=4
