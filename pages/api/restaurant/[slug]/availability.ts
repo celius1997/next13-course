@@ -58,7 +58,9 @@ export default async function handler(
             slug
         },
         select: {
-            tables: true
+            tables: true,
+            open_time: true,
+            close_time: true
         }
     })
 
@@ -95,10 +97,20 @@ export default async function handler(
             time: t.time,
             available: sumSeats >= parseInt(partySize)
         }
-    }
+    })
 
-    )
+    console.log(restaurant.open_time)
+    console.log(restaurant.close_time)
+    
+    // Filter by restaurant time window
+    availabilities.filter(availability => {
+        const timeIsAfterOpeningHour = new Date(`${day}T${availability.time}`) >= new Date(`${day}T${restaurant.open_time}`);
+        const timeIsBeforeClosingHour = new Date(`${day}T${availability.time}`) <= new Date(`${day}T${restaurant.close_time}`);
+        
+        return timeIsAfterOpeningHour && timeIsBeforeClosingHour
+    })
     return res.json({availabilities})
+    
     //return res.json({searchTimes, bookings, bookingTablesObject, tables, searchTimesWithTables, availabilities})
 }
 
