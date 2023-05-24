@@ -76,6 +76,15 @@ export default async function handler(
             tables: tables
         }
     })
+    // Delete thos tables that have already been booked
+    searchTimesWithTables.forEach(t => {
+        t.tables = t.tables.filter(tab => {
+            if (bookingTablesObject[t.date.toISOString()]){
+                if(bookingTablesObject[t.date.toISOString()][tab.id]) return false
+            }
+            return true
+        })
+    })
     return res.json({searchTimes, bookings, bookingTablesObject, tables, searchTimesWithTables})
 }
 
