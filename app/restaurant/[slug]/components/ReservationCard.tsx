@@ -71,7 +71,9 @@ interface Props {
         </div>
         <div>
             <div className='mt-5'>
-                <button className='bg-black rounded w-full px-4 text-white font-bold h-12'>Find a Time</button>
+                <button className='bg-black rounded w-full px-4 text-white font-bold h-12'>
+                    Find a Time
+                </button>
             </div>
         </div>
         </div>  
