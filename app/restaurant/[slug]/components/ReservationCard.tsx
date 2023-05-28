@@ -1,23 +1,42 @@
 "use client"
 import { useState } from 'react'
-import { partySize, times } from '../../../../data'
+import { partySize as partySizes, times } from '@/data'
 import DatePicker from 'react-datepicker'
+import useAvailability from '@/hooks/useAvailability'
  
 interface Props {
-    openTime: String,
-    closeTime: String
+    openTime: string,
+    closeTime: string,
+    slug: string
 }
- const ReservationCard = ({openTime, closeTime}: Props) => {
+ const ReservationCard = ({openTime, closeTime, slug}: Props) => {
+    const {data, loading, error, fetchAvailabilities} = useAvailability()
     const [selectedDate, setSelectedDate] = useState<Date| null>(new Date())
+    const [time, setTime] = useState(openTime)
+    const [partySize, setPartySize] = useState("2")
+    const [day, setDay] = useState(new Date().toISOString().split('T')[0])
+
+    
     const handleChangeDate = (date: Date | null) => {
         if(date) {
+            // 2023-07-02T12:00:00:000Z Extract the day from the Date object
+            setDay(date.toISOString().split('T')[0])
             return setSelectedDate(date)
         }
         return setSelectedDate(null)
     }
+    
+    const handleClick = () => {
+        fetchAvailabilities({
+            slug: slug,
+            day: day,
+            time: time,
+            partySize: partySize
+        })
+    }
     const createSelectDates = () => {
         let items:any = [];
-        partySize.map(size => {
+        partySizes.map(size => {
             items.push(
                 <option key={size.value} value={size.value}>{size.label}</option>
             );  
@@ -27,17 +46,15 @@ interface Props {
     const createSelectTimes = () => {
         let items:any = [];
         let filteredTimes = filterTimesByRestaurantOpenWindow()
-        filteredTimes.map(time => {
+        filteredTimes.map(t => {
             items.push(
-                <option key={time.time} value={time.time}>{time.displayTime}</option>
+                <option key={t.time} value={t.time}>{t.displayTime}</option>
             );  
         })          
         return items;
     }
     const filterTimesByRestaurantOpenWindow = () => {
-        console.log(openTime)
-        console.log(closeTime)
-        return times.filter(time => time.time >= openTime && time.time <= closeTime);
+        return times.filter(t => t.time >= openTime && t.time <= closeTime);
     }
    
   return (
@@ -48,8 +65,13 @@ interface Props {
             </div>
             <div className='my-3 flex flex-col'>
                 <label htmlFor=''>Party size</label>
-                <select name='' className='py-3 border-b font-light' id='party-size-select'>
-                    {createSelectDates()}
+                <select
+                    name=''
+                    className='py-3 border-b font-light'
+                    id='party-size-select'
+                    value={partySize}
+                    onChange={(e) => setPartySize(e.target.value)}>
+                        {createSelectDates()}
                 </select>
             </div>
             <div className='flex justify-between'>
@@ -64,14 +86,15 @@ interface Props {
                 </div>
                 <div className='flex flex-col w-[48%]'>
                 <label htmlFor=''>Time</label>
-                <select name='' id='' className='py-3 border-b font-light'>
+                <select name='' id='' className='py-3 border-b font-light' value={time} onChange={(e) => setTime(e.target.value)}>
                     {createSelectTimes() }
                 </select>
             </div>
         </div>
         <div>
             <div className='mt-5'>
-                <button className='bg-black rounded w-full px-4 text-white font-bold h-12'>
+                <button className='bg-black rounded w-full px-4 text-white font-bold h-12'
+                onClick={handleClick}>
                     Find a Time
                 </button>
             </div>
