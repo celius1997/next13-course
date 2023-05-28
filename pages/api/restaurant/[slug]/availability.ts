@@ -70,7 +70,6 @@ export default async function handler(
         })
     } 
     const tables = restaurant.tables;
-
     const searchTimesWithTables = searchTimes.map(searchTime => {
         return {
             date: new Date(`${day}T${searchTime}`),
@@ -98,9 +97,6 @@ export default async function handler(
             available: sumSeats >= parseInt(partySize)
         }
     })
-
-    console.log(restaurant.open_time)
-    console.log(restaurant.close_time)
     
     // Filter by restaurant time window
     availabilities.filter(availability => {
