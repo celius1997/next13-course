@@ -107,14 +107,16 @@ interface Props {
                 <p className='text-reg'>Select a Time</p>
                 <div className='flex flex-wrap mt-2'>
                     {data.map(time => {
-                        console.log(time)
+                        let t = time.time as Time 
                         return time.available ? 
                         <Link 
                         className='bg-blue-400 cursor-pointer p-2 w-24 text-white text-center mb-3 mr-3 rounded'
                         href={`/reserve/${slug}?date=${day}T${time.time}&partySize=${partySize}`}
                         key={time.time}>
                             <p className='text-sm font-bold'>
-                                {convertToDisplayTime(time.time)}
+                                {   
+                                    convertToDisplayTime(t)
+                                }
                             </p>
                         </Link> : <p className='bg-gray-200 p-2 w-24 p-3 mb-3 mr-3 rounded'></p>
                     })}

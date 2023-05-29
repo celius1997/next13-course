@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next"; 
 import {times} from '../../../../data/'
 import { PrismaClient } from "@prisma/client";
+import { Time } from '../../../../utils/convertToDisplayTime'
 
 const prisma = new PrismaClient()
 export default async function handler(
