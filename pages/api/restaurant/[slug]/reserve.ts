@@ -62,9 +62,6 @@ export default async function handler(
 
   // Find the actual entry, if its undefined there is no availability
   const searchTime = searchTimesWithTables.find((t) => {
-    console.log(t.date)
-    //console.log(time)
-    console.log((new Date(`${day}T${time}`)).toISOString())
     return (t.date).toISOString() === (new Date(`${day}T${time}`)).toISOString()
   })
 
@@ -74,8 +71,24 @@ export default async function handler(
     });
   }
 
-  return res.json(
-   searchTime);
+  //Count the tables available based on seats
+  // {[num of seats]: [table Key1, table key2, ...], [nofseats]: [key1, ...]}
+  // We only have tables with 2 or 4 seats
+  const tablesCount: {
+    2: number[],
+    4: number[]
+  } = {
+    2:[], 
+    4: []
+  }
+  searchTime.tables.forEach(table => {
+    if(table.seats === 2){
+      tablesCount[2].push(table.id)
+    } else {
+      tablesCount[4].push(table.id)
+    }
+  })
+  return res.json({searchTime, tablesCount});
 }
 
 // http://localhost:3000/api/restaurant/vivaan-fine-indian-cuisine-ottawa/reserve?day=2023-05-27&time=19:30:00.000Z&partySize=4
