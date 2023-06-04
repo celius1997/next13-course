@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import axios from 'axios'
 
 export default function useReservation() {
@@ -15,7 +15,8 @@ export default function useReservation() {
         bookerFirstName,
         bookerLastName,
         bookerOcassion,
-        bookerRequest
+        bookerRequest,
+        setDidBook,
     }: {
             slug:string;
             partySize: string;
@@ -26,7 +27,9 @@ export default function useReservation() {
             bookerFirstName: string;
             bookerLastName: string;
             bookerOcassion: string;
-            bookerRequest: string
+            bookerRequest: string;
+            setDidBook: Dispatch<SetStateAction<boolean>>
+
         }) => {
         setLoading(true)
         try {
@@ -46,14 +49,17 @@ export default function useReservation() {
                 }
             })
             setLoading(false)
+            setDidBook(true)
+            return response.data
         } catch (error: any){
             setLoading(false)
+            setDidBook(false)
             setError(error.response.data.errorMesage)
         }
     }
     return {
         loading,
         error,
-        fetchAvailabilities
+        createReservation
     }
 }
