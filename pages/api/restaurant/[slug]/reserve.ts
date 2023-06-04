@@ -17,12 +17,12 @@ export default async function handler(
       partySize: string;
     };
 
-    const {bookerEmail, bookerPhone, bookerFirstName, bookerLastName, bookerOcassion, bookerRequest} = req.query as {
+    const {bookerEmail, bookerPhone, bookerFirstName, bookerLastName, bookerOcasion, bookerRequest} = req.body as {
       bookerEmail: string;
       bookerPhone: string;
       bookerFirstName: string;
       bookerLastName: string;
-      bookerOcassion: string;
+      bookerOcasion: string;
       bookerRequest: string;
     }
 
@@ -175,7 +175,7 @@ export default async function handler(
       booker_first_name: bookerFirstName,
       booker_last_name: bookerLastName,
       booker_phone: bookerPhone,
-      booker_ocasion: bookerOcassion,
+      booker_ocasion: bookerOcasion,
       booker_request: bookerRequest,
       restaurant_id: restaurant.id
     }
@@ -187,6 +187,8 @@ export default async function handler(
       booking_id: booking.id
     }
   })
+
+  console.log(bookingsOnTablesData)
 
   // Link the booking to the table ids
   await prisma.bookingsOnTables.createMany({
