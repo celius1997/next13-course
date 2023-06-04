@@ -88,7 +88,57 @@ export default async function handler(
       tablesCount[4].push(table.id)
     }
   })
-  return res.json({searchTime, tablesCount});
+//Determine the tables to book based on the partySize
+const numOfTables: {
+  2: number[],
+  4: number[]
+} = {
+  2:[], 
+  4: []
 }
+const seatsAvailable = tablesCount[2].length*2 +tablesCount[4].length*4;
+
+if(seatsAvailable < parseInt(partySize)) {
+  return res.status(400).json({
+    errorMesage: "Not enough seats available, can't book",
+  });
+}
+
+const tablesToBook: number[] = [];
+let seatsRemaining = parseInt(partySize);
+
+while (seatsRemaining > 0) {
+  if (seatsRemaining > 3) {
+    if(tablesCount[4].length) {
+      tablesToBook.push(tablesCount[4][0])
+      tablesCount[4].shift()
+      seatsRemaining -= 4;
+    } else {
+      tablesToBook.push(tablesCount[2][0])
+      tablesCount[2].shift()
+      seatsRemaining -= 2;
+    }
+  } else {
+    if(seatsRemaining === 3 && tablesCount[4].length) {
+      tablesToBook.push(tablesCount[4][0])
+      tablesCount[4].shift()
+      seatsRemaining -= 4;
+    }
+    else if(tablesCount[2].length) {
+      tablesToBook.push(tablesCount[2][0])
+      tablesCount[2].shift()
+      seatsRemaining -= 2;
+    } else {
+      tablesToBook.push(tablesCount[4][0])
+      tablesCount[4].shift()
+      seatsRemaining -= 4;
+    }
+  }
+}
+
+  return res.json({tablesCount, tablesToBook});
+}
+
+
 
 // http://localhost:3000/api/restaurant/vivaan-fine-indian-cuisine-ottawa/reserve?day=2023-05-27&time=19:30:00.000Z&partySize=4
