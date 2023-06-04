@@ -1,8 +1,11 @@
 import React from 'react'
+import { convertToDisplayTime, Time } from '@/utils/convertToDisplayTime'
+import {format} from 'date-fns'
 
-
-export default function Header({image, name}: {image: string, name: string}) {
-  return (
+export default function Header({image, name, date, partySize}: {image: string, name: string, date: string, partySize: string}) {
+    const time = date.split('T')[1] as Time
+    const day = date.split('T')[0]
+    return (
     <div>
         <h3 className='font-bold'>You're almost done!</h3>
         <div className="mt-5 flex">
@@ -10,9 +13,21 @@ export default function Header({image, name}: {image: string, name: string}) {
             <div className="ml-4">
                 <h1 className="text-3xl font-bold">{name}</h1>
                 <div className="flex mt-3">
-                    <p className='mr-6'>15th Sat, Apr, 2023</p>
-                    <p className='mr-6'>9:00 PM</p>
-                    <p className='mr-6'>3 people</p>
+                    <p className='mr-6'>{
+                        format(new Date(date), "ccc, LLL, d")
+                    }</p>
+                    <p className='mr-6'>
+                        {
+                            convertToDisplayTime(time)
+                        }
+                    </p>
+                    <p className='mr-6'>
+                        {(parseInt(partySize) < 2) ? (
+                            <div>{partySize} person</div>
+                        ): (
+                            <div>{partySize} people</div>
+                        )}
+                    </p>
                 </div>
             </div>
         </div>
