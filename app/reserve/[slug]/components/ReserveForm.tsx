@@ -1,4 +1,5 @@
 "use client"
+import useReservation from "@/hooks/useReservation"
 import { useState, useEffect} from "react"
 
 export default function ReserveForm() {
@@ -11,6 +12,7 @@ export default function ReserveForm() {
       bookerRequest: ""
   })
   const [disabled, setDisabled] = useState(true)
+  const {error, loading, createReservation} = useReservation()
 
   // Handler to update the input props
   const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
