@@ -1,6 +1,7 @@
 import { findAvailableTables } from "@/services/restaurant/findAvailableTables";
 import { PrismaClient } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
+import validator from "validator";
 
 const prisma = new PrismaClient();
 
@@ -15,6 +16,33 @@ export default async function handler(
       time: string;
       partySize: string;
     };
+
+    const {bookerEmail, bookerPhone, bookerFirstName, bookerLastName, bookerOcassion, bookerRequest} = req.query as {
+      bookerEmail: string;
+      bookerPhone: string;
+      bookerFirstName: string;
+      bookerLastName: string;
+      bookerOcassion: string;
+      bookerRequest: string;
+    }
+
+    const errors: String[] = [];
+    const validationSchema = [
+        {
+            valid: validator.isEmail(bookerEmail),
+            errorMessage: "Email is invalid"
+        }
+    ]
+    validationSchema.forEach(check => {
+        if(!check.valid){
+            errors.push(check.errorMessage)
+        }
+    })
+    if(errors.length) {
+        return res
+        .status(400)
+        .json({errorMessage: errors[0]})
+    }
   
     if (!day || !partySize || !time) {
       return res.status(400).json({
@@ -27,6 +55,7 @@ export default async function handler(
         slug,
       },
       select: {
+        id: true,
         tables: true,
         open_time: true,
         close_time: true,
@@ -136,8 +165,35 @@ export default async function handler(
       }
     }
   }
+
+  // Create new booking in the database
+  const booking = await prisma.booking.create({
+    data: {
+      number_of_people: parseInt(partySize),
+      booking_time: new Date(`${day}T${time}`),
+      booker_email: bookerEmail,
+      booker_first_name: bookerFirstName,
+      booker_last_name: bookerLastName,
+      booker_phone: bookerPhone,
+      booker_ocasion: bookerOcassion,
+      booker_request: bookerRequest,
+      restaurant_id: restaurant.id
+    }
+  })
+
+  const bookingsOnTablesData = tablesToBook.map(table_id => {
+    return {
+      table_id,
+      booking_id: booking.id
+    }
+  })
+
+  // Link the booking to the table ids
+  await prisma.bookingsOnTables.createMany({
+    data: bookingsOnTablesData
+  })
   
-    return res.json({tablesCount, tablesToBook});
+    return res.json({booking, bookingsOnTablesData});
   }
 }
 
