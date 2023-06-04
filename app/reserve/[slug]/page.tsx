@@ -36,7 +36,11 @@ export default async function Reserve({
                 name={restaurant?.name}
                 date={searchParams.date}
                 partySize = {searchParams.partySize}/>
-              <ReserveForm/>
+              <ReserveForm
+                date={searchParams.date}
+                partySize = {searchParams.partySize}
+                slug = {params.slug}
+              />
             </div>
           </div>
         </> 
